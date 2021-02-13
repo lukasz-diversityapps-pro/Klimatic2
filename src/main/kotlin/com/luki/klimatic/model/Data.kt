@@ -1,4 +1,4 @@
-package model
+package com.luki.klimatic.model
 
 import javafx.beans.property.*
 import tornadofx.*

@@ -1,4 +1,4 @@
-package com.example.demo.app
+package com.luki.klimatic.app
 
 import javafx.scene.text.FontWeight
 import tornadofx.Stylesheet

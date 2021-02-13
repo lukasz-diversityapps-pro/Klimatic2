@@ -1,6 +1,6 @@
-package com.example.demo.view
+package com.luki.klimatic.view
 
-import com.example.demo.app.Styles
+import com.luki.klimatic.app.Styles
 import tornadofx.*
 
 class MainView : View("Hello TornadoFX") {
