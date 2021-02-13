@@ -1,5 +1,6 @@
 package com.luki.klimatic.model
 
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 import javax.json.JsonObject
@@ -8,7 +9,7 @@ class Weather : JsonModel {
     private val iconProperty = SimpleStringProperty()
     private var icon by iconProperty
 
-    private val codeProperty = SimpleStringProperty()
+    private val codeProperty = SimpleIntegerProperty()
     private var code by codeProperty
 
     private val descriptionProperty = SimpleStringProperty()
@@ -17,7 +18,7 @@ class Weather : JsonModel {
     override fun updateModel(json: JsonObject) {
         with(json) {
             icon = getString("icon")
-            code = getString("code")
+            code = getInt("code")
             description = getString("description")
         }
     }
