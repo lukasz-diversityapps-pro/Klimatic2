@@ -1,6 +1,7 @@
 package model
 
 import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 import javax.json.JsonObject
@@ -18,12 +19,16 @@ class City : JsonModel {
     val longitudeProperty = SimpleDoubleProperty()
     var longitude by longitudeProperty
 
+    val dataProperty = SimpleListProperty<Data>()
+    var data: List<Data> by property(dataProperty)
+
     override fun updateModel(json: JsonObject) {
         with(json) {
             cityName = getString("city_name")
             countryCode = getString("country_code")
             latitude = getDouble("lat")
             longitude = getDouble("lon")
+            data = getJsonArray("data").toModel()
         }
     }
 }
