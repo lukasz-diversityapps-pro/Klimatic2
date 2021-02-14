@@ -10,28 +10,18 @@ import tornadofx.Rest
 import tornadofx.toModel
 import java.time.LocalDate
 
-class ForecastController: Controller() {
+class ForecastController : Controller() {
     val selectedCity: CityModel by inject()
 
-    var allWeather = FXCollections.emptyObservableList<Weather>()
+    var allWeather = FXCollections.emptyObservableList<ForecastPayload>()
 
     val api: Rest by inject()
+
     init {
         api.baseURI = "https://api.weatherbit.io/v2.0/forecast/daily/"
     }
 
-    fun listPayload(cityName: String = selectedCity.cityName.value): List<ForecastPayload> {
-        val forecast = api.get("?city=$cityName&country=PL&lang=pl&key=$appid")
+    fun listPayload(cityName: String = selectedCity.cityName.value) =
+        api.get("?city=$cityName&country=PL&lang=pl&key=$appid")
             .list().toModel<ForecastPayload>()
-
-        forecast[0].data.forEach {
-            println("${it.validDate} " +
-                    "${it.temperature} min: ${it.minTemp} max: ${it.maxTemp} " +
-                    "ozone: ${it.ozone} " +
-                    "opady: ${it.precipitation} " +
-                    "lat:${forecast[0].latitude} lon:${forecast[0].longitude}" )
-        }
-
-        return forecast
-    }
 }
