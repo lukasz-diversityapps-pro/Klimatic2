@@ -2,13 +2,11 @@ package com.luki.klimatic.controller
 
 import com.luki.klimatic.model.CityModel
 import com.luki.klimatic.model.ForecastPayload
-import com.luki.klimatic.model.Weather
 import com.luki.klimatic.util.appid
 import javafx.collections.FXCollections
 import tornadofx.Controller
 import tornadofx.Rest
 import tornadofx.toModel
-import java.time.LocalDate
 
 class ForecastController : Controller() {
     val selectedCity: CityModel by inject()
@@ -19,6 +17,13 @@ class ForecastController : Controller() {
 
     init {
         api.baseURI = "https://api.weatherbit.io/v2.0/forecast/daily/"
+    }
+
+    fun getIcon(precipitation: Double, snow: Double, clouds: Int): String = when {
+        precipitation > 1.0 -> "rain"
+        snow > 0 -> "snow"
+        clouds > 10 -> "clouds"
+        else -> "clear"
     }
 
     fun listPayload(cityName: String = selectedCity.cityName.value) =
