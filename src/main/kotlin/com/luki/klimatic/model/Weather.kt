@@ -7,7 +7,7 @@ import javax.json.JsonObject
 
 class Weather : JsonModel {
     private val iconProperty = SimpleStringProperty()
-    private var icon by iconProperty
+    var icon by iconProperty
 
     private val codeProperty = SimpleIntegerProperty()
     private var code by codeProperty

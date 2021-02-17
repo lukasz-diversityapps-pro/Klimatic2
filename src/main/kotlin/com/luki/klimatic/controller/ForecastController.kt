@@ -19,13 +19,6 @@ class ForecastController : Controller() {
         api.baseURI = "https://api.weatherbit.io/v2.0/forecast/daily/"
     }
 
-    fun getIcon(precipitation: Double, snow: Double, clouds: Int): String = when {
-        precipitation > 1.0 -> "rain"
-        snow > 0 -> "snow"
-        clouds > 10 -> "clouds"
-        else -> "clear"
-    }
-
     fun listPayload(cityName: String = selectedCity.cityName.value) =
         api.get("?city=$cityName&country=PL&lang=pl&key=$appid")
             .list().toModel<ForecastPayload>()

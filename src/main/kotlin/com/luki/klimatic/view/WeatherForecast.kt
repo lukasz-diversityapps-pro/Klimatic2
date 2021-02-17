@@ -67,19 +67,12 @@ class WeatherForecast : View("Klimatic") {
                                         vbox {
                                             cityLabel.text = forecastPayload.cityName + "," +
                                                     " " + forecastPayload.data[0].validDate.format(DateTimeFormatter.ofPattern("d MMMM"))
+
                                             cityLabel.apply {
                                                 addClass(Styles.mainLabels)
                                             }
 
-                                            todayIcon.graphic = imageview(
-                                                "${
-                                                    forecastController.getIcon(
-                                                        forecastPayload.data[0].precipitation,
-                                                        forecastPayload.data[0].snow,
-                                                        forecastPayload.data[0].clouds
-                                                    )
-                                                }.png", lazyload = true
-                                            ) {
+                                            todayIcon.graphic = imageview("/icons/${forecastPayload.data[0].weather.icon}.png", lazyload = true) {
                                                 fitHeight = 100.0
                                                 fitWidth = 100.0
                                             }
