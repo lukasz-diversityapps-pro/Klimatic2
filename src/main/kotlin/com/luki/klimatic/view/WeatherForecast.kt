@@ -4,6 +4,9 @@ import com.luki.klimatic.app.Styles
 import com.luki.klimatic.controller.ForecastController
 import com.luki.klimatic.model.Data
 import com.luki.klimatic.model.ForecastPayload
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import javafx.beans.binding.Bindings
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
 import javafx.scene.control.Label
@@ -13,6 +16,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.FontPosture
 import tornadofx.*
+import tornadofx.WizardStyles.Companion.graphic
 import java.math.RoundingMode
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -32,7 +36,7 @@ class WeatherForecast : View("Klimatic") {
     var dividerHB: HBox by singleAssign()
 
     init {
-        forecastController.listPayload("Szczecin")
+//        forecastController.listPayload("Szczecin")
     }
 
     override val root = borderpane {
@@ -140,6 +144,26 @@ class WeatherForecast : View("Klimatic") {
                                                                 }
                                                             }
                                                             paddingBottom = 20.0
+                                                        }
+
+                                                        vbox(alignment = Pos.CENTER) {
+                                                            paddingTop = 80.0
+                                                            label {
+                                                                this.textProperty().bind(Bindings.concat(it.minTempProperty, " °C"))
+                                                            }.apply {
+                                                                graphic = FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_DOWN)
+                                                            }
+                                                            label{
+                                                                this.textProperty().bind(Bindings.concat(it.maxTempProperty, " °C"))
+                                                            }.apply {
+                                                                graphic = FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_UP)
+                                                            }
+                                                            label {
+                                                                this.textProperty().bind(Bindings.concat(
+                                                                    it.precipitationProperty.value.toBigDecimal()
+                                                                        .setScale(1, RoundingMode.UP).toDouble(), " mm"
+                                                                ))
+                                                            }
                                                         }
                                                     }
                                                 }
