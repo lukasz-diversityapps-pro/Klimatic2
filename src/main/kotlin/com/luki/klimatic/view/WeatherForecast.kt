@@ -44,7 +44,6 @@ class WeatherForecast : View("Klimatic") {
 
     override val root = borderpane {
         style {
-//            backgroundColor += c("#666699")
             backgroundImage += File("src/main/resources/backgrounds/winter_01.JPG").toURI()
             backgroundSize += BackgroundSize(1.0, 1.0, true, true, false, true)
         }
@@ -67,9 +66,9 @@ class WeatherForecast : View("Klimatic") {
 
     private fun VBox.currentWeatherView() = vbox {
         form {
-            paddingAll = 20.0
+            paddingAll = 40.0
             fieldset {
-                field("Miasto", Orientation.VERTICAL) {
+                field("", Orientation.VERTICAL) {
                     textfield(forecastController.selectedCity.cityName) {
                         validator {
                             if (it.isNullOrBlank()) error("Wprowadź miasto")
@@ -86,25 +85,26 @@ class WeatherForecast : View("Klimatic") {
                                         forecastPayload = forecastController.allWeather[0]
                                         vbox {
                                             paddingAll = 20.0
-                                            cityLabel.text = forecastPayload.cityName + ", " +
-                                                    forecastPayload.data[0].validDate.format(
-                                                        DateTimeFormatter.ofPattern(
-                                                            "d MMMM"
+                                            hbox {
+                                                cityLabel.text = forecastPayload.cityName + ", " +
+                                                        forecastPayload.data[0].validDate.format(
+                                                            DateTimeFormatter.ofPattern(
+                                                                "d MMMM"
+                                                            )
                                                         )
-                                                    )
 
-                                            cityLabel.apply {
-                                                addClass(Styles.mainLabels)
+                                                cityLabel.apply {
+                                                    addClass(Styles.mainLabels)
+                                                }
+
+                                                todayIcon.graphic = imageview(
+                                                    "/icons/${forecastPayload.data[0].weather.icon}.png",
+                                                    lazyload = true
+                                                ) {
+                                                    fitHeight = 50.0
+                                                    fitWidth = 50.0
+                                                }
                                             }
-
-                                            todayIcon.graphic = imageview(
-                                                "/icons/${forecastPayload.data[0].weather.icon}.png",
-                                                lazyload = true
-                                            ) {
-                                                fitHeight = 50.0
-                                                fitWidth = 50.0
-                                            }
-
                                             todayTemp.text = "temperatura: ${forecastPayload.data[0].temperature} °C "
                                             todayPressure.text =
                                                 "ciśnienie: ${forecastPayload.data[0].pressure.roundToInt()} mbar"
@@ -122,16 +122,19 @@ class WeatherForecast : View("Klimatic") {
                                                 addClass(Styles.mainLabels)
                                             }
 
-                                            dividerHB.style{
-                                                borderColor += box(Color.TRANSPARENT, Color.TRANSPARENT, Color.GRAY, Color.TRANSPARENT)
+                                            dividerHB.style {
+                                                borderColor += box(
+                                                    Color.TRANSPARENT,
+                                                    Color.TRANSPARENT,
+                                                    Color.BLACK,
+                                                    Color.TRANSPARENT
+                                                )
                                             }
 
-//                                            sevenDayLabel.text = "Prognoza 7-dniowa"
+                                            sevenDayLabel.text = "Prognoza 7-dniowa"
                                             sevenDayLabel.style {
                                                 padding = box(30.px, 0.px, 0.px, 10.px)
-                                                fill = Color.GRAY
                                                 fontStyle = FontPosture.ITALIC
-                                                opacity = 0.7
                                             }
 
                                             forecastView.items = forecastPayload.data.subList(0, 7).observable()
@@ -150,10 +153,11 @@ class WeatherForecast : View("Klimatic") {
                                                         vbox(alignment = Pos.TOP_CENTER) {
                                                             label(it.validDate.format(DateTimeFormatter.ofPattern("EEEE")))
                                                             label {
-                                                                graphic = imageview("/icons/${it.weather.icon}.png").apply {
-                                                                    fitHeight = 50.0
-                                                                    fitWidth = 50.0
-                                                                }
+                                                                graphic =
+                                                                    imageview("/icons/${it.weather.icon}.png").apply {
+                                                                        fitHeight = 50.0
+                                                                        fitWidth = 50.0
+                                                                    }
                                                             }
                                                             paddingBottom = 20.0
                                                         }
@@ -185,6 +189,13 @@ class WeatherForecast : View("Klimatic") {
                                 }
                             }
                         }
+                    }.style {
+                        backgroundColor += Color.TRANSPARENT
+                        borderColor += box(Color.TRANSPARENT, Color.TRANSPARENT, Color.BLACK, Color.TRANSPARENT)
+                        padding = box(0.px, 0.px, 0.px, 0.px)
+                        fontSize = 40.px
+                        fontFamily = "Kanit"
+                        opacity = 1.0
                     }
                 }
             }

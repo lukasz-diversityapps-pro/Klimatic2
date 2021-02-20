@@ -17,14 +17,14 @@ class Styles : Stylesheet() {
         mainLabels {
             fontSize = 20.px
             fill = BLACK
-//            fill = c(15, 15, 15, 1.0)
-            fontFamily = "Cantarell"
+            fontFamily = "Kanit"
         }
 
         label and heading {
             padding = box(10.px)
             fontSize = 20.px
             fontWeight = FontWeight.BOLD
+            fontFamily = "Kanit"
         }
 
         contentWrapper {
