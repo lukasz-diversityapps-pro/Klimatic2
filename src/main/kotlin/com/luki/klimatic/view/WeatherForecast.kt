@@ -4,6 +4,7 @@ import com.luki.klimatic.app.Styles
 import com.luki.klimatic.controller.ForecastController
 import com.luki.klimatic.model.Data
 import com.luki.klimatic.model.ForecastPayload
+import com.sun.jndi.toolkit.url.Uri
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.binding.Bindings
@@ -11,12 +12,14 @@ import javafx.geometry.Orientation
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.input.KeyCode
+import javafx.scene.layout.BackgroundSize
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.FontPosture
 import tornadofx.*
 import tornadofx.WizardStyles.Companion.graphic
+import java.io.File
 import java.math.RoundingMode
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -41,7 +44,9 @@ class WeatherForecast : View("Klimatic") {
 
     override val root = borderpane {
         style {
-            backgroundColor += c("#666699")
+//            backgroundColor += c("#666699")
+            backgroundImage += File("src/main/resources/backgrounds/winter_01.JPG").toURI()
+            backgroundSize += BackgroundSize(1.0, 1.0, true, true, false, true)
         }
 
         center = vbox {
@@ -96,8 +101,8 @@ class WeatherForecast : View("Klimatic") {
                                                 "/icons/${forecastPayload.data[0].weather.icon}.png",
                                                 lazyload = true
                                             ) {
-                                                fitHeight = 100.0
-                                                fitWidth = 100.0
+                                                fitHeight = 50.0
+                                                fitWidth = 50.0
                                             }
 
                                             todayTemp.text = "temperatura: ${forecastPayload.data[0].temperature} °C "
@@ -121,7 +126,7 @@ class WeatherForecast : View("Klimatic") {
                                                 borderColor += box(Color.TRANSPARENT, Color.TRANSPARENT, Color.GRAY, Color.TRANSPARENT)
                                             }
 
-                                            sevenDayLabel.text = "Prognoza 7-dniowa"
+//                                            sevenDayLabel.text = "Prognoza 7-dniowa"
                                             sevenDayLabel.style {
                                                 padding = box(30.px, 0.px, 0.px, 10.px)
                                                 fill = Color.GRAY
@@ -133,14 +138,21 @@ class WeatherForecast : View("Klimatic") {
                                             forecastView.apply {
                                                 cellWidth = 120.0
                                                 cellHeight = 200.0
+                                                cellFormat {
+                                                    style {
+                                                        backgroundColor += c(1.0, 1.0, 1.0, 0.5)
+                                                        borderRadius += box(10.px)
+
+                                                    }
+                                                }
                                                 cellCache {
                                                     stackpane {
                                                         vbox(alignment = Pos.TOP_CENTER) {
                                                             label(it.validDate.format(DateTimeFormatter.ofPattern("EEEE")))
                                                             label {
                                                                 graphic = imageview("/icons/${it.weather.icon}.png").apply {
-                                                                    fitHeight = 100.0
-                                                                    fitWidth = 100.0
+                                                                    fitHeight = 50.0
+                                                                    fitWidth = 50.0
                                                                 }
                                                             }
                                                             paddingBottom = 20.0
@@ -149,12 +161,12 @@ class WeatherForecast : View("Klimatic") {
                                                         vbox(alignment = Pos.CENTER) {
                                                             paddingTop = 80.0
                                                             label {
-                                                                this.textProperty().bind(Bindings.concat(it.minTempProperty, " °C"))
+                                                                this.textProperty().bind(Bindings.concat(it.minTempProperty.value.toInt(), " °C"))
                                                             }.apply {
                                                                 graphic = FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_DOWN)
                                                             }
                                                             label{
-                                                                this.textProperty().bind(Bindings.concat(it.maxTempProperty, " °C"))
+                                                                this.textProperty().bind(Bindings.concat(it.maxTempProperty.value.toInt(), " °C"))
                                                             }.apply {
                                                                 graphic = FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_UP)
                                                             }
