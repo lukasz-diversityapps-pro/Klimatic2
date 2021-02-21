@@ -44,7 +44,7 @@ class WeatherForecast : View("Klimatic") {
 
     override val root = borderpane {
         style {
-            backgroundImage += File("src/main/resources/backgrounds/winter_01.JPG").toURI()
+            backgroundImage += this::class.java.getResource("/backgrounds/winter_01.jpg").toURI()
             backgroundSize += BackgroundSize(1.0, 1.0, true, true, false, true)
         }
 
