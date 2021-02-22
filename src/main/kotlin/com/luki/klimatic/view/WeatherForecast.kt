@@ -44,7 +44,7 @@ class WeatherForecast : View("Klimatic") {
 
     override val root = borderpane {
         style {
-            backgroundImage += this::class.java.getResource("/backgrounds/winter_01.jpg").toURI()
+            backgroundImage += this::class.java.getResource("/backgrounds/" + forecastController.getMonth() + "_"+ forecastController.getRandom(18) +".jpg").toURI()
             backgroundSize += BackgroundSize(1.0, 1.0, true, true, false, true)
         }
 
@@ -84,42 +84,45 @@ class WeatherForecast : View("Klimatic") {
                                     } ui {
                                         forecastPayload = forecastController.allWeather[0]
                                         vbox {
-                                            paddingAll = 20.0
-                                            hbox {
-                                                cityLabel.text = forecastPayload.cityName + ", " +
-                                                        forecastPayload.data[0].validDate.format(
-                                                            DateTimeFormatter.ofPattern(
-                                                                "d MMMM"
+                                            vbox {
+                                                paddingAll = 20.0
+                                                hbox {
+                                                    cityLabel.text = forecastPayload.cityName + ", " +
+                                                            forecastPayload.data[0].validDate.format(
+                                                                DateTimeFormatter.ofPattern(
+                                                                    "d MMMM"
+                                                                )
                                                             )
-                                                        )
 
-                                                cityLabel.apply {
+                                                    cityLabel.apply {
+                                                        addClass(Styles.mainLabels)
+                                                    }
+
+                                                    todayIcon.graphic = imageview(
+                                                        "/icons/${forecastPayload.data[0].weather.icon}.png",
+                                                        lazyload = true
+                                                    ) {
+                                                        fitHeight = 50.0
+                                                        fitWidth = 50.0
+                                                    }
+                                                }
+                                                todayTemp.text =
+                                                    "temperatura: ${forecastPayload.data[0].temperature} °C "
+                                                todayPressure.text =
+                                                    "ciśnienie: ${forecastPayload.data[0].pressure.roundToInt()} mbar"
+                                                todayPrecipitation.text = "opady: ${
+                                                    forecastPayload.data[0].precipitation.toBigDecimal()
+                                                        .setScale(1, RoundingMode.UP).toDouble()
+                                                } mm"
+                                                todayTemp.apply {
                                                     addClass(Styles.mainLabels)
                                                 }
-
-                                                todayIcon.graphic = imageview(
-                                                    "/icons/${forecastPayload.data[0].weather.icon}.png",
-                                                    lazyload = true
-                                                ) {
-                                                    fitHeight = 50.0
-                                                    fitWidth = 50.0
+                                                todayPressure.apply {
+                                                    addClass(Styles.mainLabels)
                                                 }
-                                            }
-                                            todayTemp.text = "temperatura: ${forecastPayload.data[0].temperature} °C "
-                                            todayPressure.text =
-                                                "ciśnienie: ${forecastPayload.data[0].pressure.roundToInt()} mbar"
-                                            todayPrecipitation.text = "opady: ${
-                                                forecastPayload.data[0].precipitation.toBigDecimal()
-                                                    .setScale(1, RoundingMode.UP).toDouble()
-                                            } mm"
-                                            todayTemp.apply {
-                                                addClass(Styles.mainLabels)
-                                            }
-                                            todayPressure.apply {
-                                                addClass(Styles.mainLabels)
-                                            }
-                                            todayPrecipitation.apply {
-                                                addClass(Styles.mainLabels)
+                                                todayPrecipitation.apply {
+                                                    addClass(Styles.mainLabels)
+                                                }
                                             }
 
                                             dividerHB.style {

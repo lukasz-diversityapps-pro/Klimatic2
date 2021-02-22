@@ -10,6 +10,8 @@ import tornadofx.Rest
 import tornadofx.toModel
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.time.LocalDate
+import java.time.Month
 
 class ForecastController : Controller() {
     val selectedCity: CityModel by inject()
@@ -30,4 +32,21 @@ class ForecastController : Controller() {
             )
         }&country=PL&lang=pl&key=$appid")
         .list().toModel()
+
+    fun getMonth(): String {
+        return when(LocalDate.now().month) {
+            Month.FEBRUARY -> "luty"
+            Month.MARCH -> "marzec"
+            Month.APRIL -> "kwiecien"
+            else -> "kwiecien"
+        }
+    }
+
+    fun getRandom(end: Int): String {
+        return addZero((1..end).shuffled().first().toString())
+    }
+
+    private fun addZero(text: String): String {
+        return if (text.length == 2) text else "0$text"
+    }
 }
