@@ -35,7 +35,6 @@ class WeatherForecast : View("Klimatic") {
     var todayPrecipitation: Label by singleAssign()
     var todayIcon: Label by singleAssign()
     var forecastView: DataGrid<Data> by singleAssign()
-    var sevenDayLabel: Label by singleAssign()
     var dividerHB: HBox by singleAssign()
 
     init {
@@ -44,7 +43,11 @@ class WeatherForecast : View("Klimatic") {
 
     override val root = borderpane {
         style {
-            backgroundImage += this::class.java.getResource("/backgrounds/" + forecastController.getMonth() + "_"+ forecastController.getRandom(18) +".jpg").toURI()
+            backgroundImage += this::class.java.getResource(
+                "/backgrounds/" + forecastController.getMonth() + "_" + forecastController.getRandom(
+                    18
+                ) + ".jpg"
+            ).toURI()
             backgroundSize += BackgroundSize(1.0, 1.0, true, true, false, true)
         }
 
@@ -52,12 +55,16 @@ class WeatherForecast : View("Klimatic") {
             addClass(Styles.contentWrapper)
             currentWeatherView()
             vbox(alignment = Pos.CENTER) {
-                cityLabel = label()
-                todayIcon = label()
-                todayTemp = label()
-                todayPressure = label()
-                todayPrecipitation = label()
-                sevenDayLabel = label()
+                vbox(alignment = Pos.CENTER) {
+                    cityLabel = label()
+                    todayIcon = label()
+                    todayTemp = label()
+                    todayPressure = label()
+                    todayPrecipitation = label()
+                }.style {
+                    backgroundColor += Color(1.0, 1.0, 1.0, 0.5)
+                    padding = box(30.px, 0.px)
+                }
                 dividerHB = hbox()
                 forecastView = datagrid()
             }
@@ -84,45 +91,42 @@ class WeatherForecast : View("Klimatic") {
                                     } ui {
                                         forecastPayload = forecastController.allWeather[0]
                                         vbox {
-                                            vbox {
-                                                paddingAll = 20.0
-                                                hbox {
-                                                    cityLabel.text = forecastPayload.cityName + ", " +
-                                                            forecastPayload.data[0].validDate.format(
-                                                                DateTimeFormatter.ofPattern(
-                                                                    "d MMMM"
-                                                                )
+                                            paddingAll = 20.0
+                                            hbox {
+                                                cityLabel.text = forecastPayload.cityName + ", " +
+                                                        forecastPayload.data[0].validDate.format(
+                                                            DateTimeFormatter.ofPattern(
+                                                                "d MMMM"
                                                             )
+                                                        )
 
-                                                    cityLabel.apply {
-                                                        addClass(Styles.mainLabels)
-                                                    }
+                                                cityLabel.apply {
+                                                    addClass(Styles.mainLabels)
+                                                }
 
-                                                    todayIcon.graphic = imageview(
-                                                        "/icons/${forecastPayload.data[0].weather.icon}.png",
-                                                        lazyload = true
-                                                    ) {
-                                                        fitHeight = 50.0
-                                                        fitWidth = 50.0
-                                                    }
+                                                todayIcon.graphic = imageview(
+                                                    "/icons/${forecastPayload.data[0].weather.icon}.png",
+                                                    lazyload = true
+                                                ) {
+                                                    fitHeight = 50.0
+                                                    fitWidth = 50.0
                                                 }
-                                                todayTemp.text =
-                                                    "temperatura: ${forecastPayload.data[0].temperature} °C "
-                                                todayPressure.text =
-                                                    "ciśnienie: ${forecastPayload.data[0].pressure.roundToInt()} mbar"
-                                                todayPrecipitation.text = "opady: ${
-                                                    forecastPayload.data[0].precipitation.toBigDecimal()
-                                                        .setScale(1, RoundingMode.UP).toDouble()
-                                                } mm"
-                                                todayTemp.apply {
-                                                    addClass(Styles.mainLabels)
-                                                }
-                                                todayPressure.apply {
-                                                    addClass(Styles.mainLabels)
-                                                }
-                                                todayPrecipitation.apply {
-                                                    addClass(Styles.mainLabels)
-                                                }
+                                            }
+                                            todayTemp.text = "temperatura: ${forecastPayload.data[0].temperature} °C "
+                                            todayPressure.text =
+                                                "ciśnienie: ${forecastPayload.data[0].pressure.roundToInt()} mbar"
+                                            todayPrecipitation.text = "opady: ${
+                                                forecastPayload.data[0].precipitation.toBigDecimal()
+                                                    .setScale(1, RoundingMode.UP).toDouble()
+                                            } mm"
+                                            todayTemp.apply {
+                                                addClass(Styles.mainLabels)
+                                            }
+                                            todayPressure.apply {
+                                                addClass(Styles.mainLabels)
+                                            }
+                                            todayPrecipitation.apply {
+                                                addClass(Styles.mainLabels)
                                             }
 
                                             dividerHB.style {
@@ -132,12 +136,6 @@ class WeatherForecast : View("Klimatic") {
                                                     Color.BLACK,
                                                     Color.TRANSPARENT
                                                 )
-                                            }
-
-                                            sevenDayLabel.text = "Prognoza 7-dniowa"
-                                            sevenDayLabel.style {
-                                                padding = box(30.px, 0.px, 0.px, 10.px)
-                                                fontStyle = FontPosture.ITALIC
                                             }
 
                                             forecastView.items = forecastPayload.data.subList(0, 7).observable()
@@ -168,20 +166,35 @@ class WeatherForecast : View("Klimatic") {
                                                         vbox(alignment = Pos.CENTER) {
                                                             paddingTop = 80.0
                                                             label {
-                                                                this.textProperty().bind(Bindings.concat(it.minTempProperty.value.toInt(), " °C"))
+                                                                this.textProperty().bind(
+                                                                    Bindings.concat(
+                                                                        it.minTempProperty.value.toInt(),
+                                                                        " °C"
+                                                                    )
+                                                                )
                                                             }.apply {
-                                                                graphic = FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_DOWN)
-                                                            }
-                                                            label{
-                                                                this.textProperty().bind(Bindings.concat(it.maxTempProperty.value.toInt(), " °C"))
-                                                            }.apply {
-                                                                graphic = FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_UP)
+                                                                graphic =
+                                                                    FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_DOWN)
                                                             }
                                                             label {
-                                                                this.textProperty().bind(Bindings.concat(
-                                                                    it.precipitationProperty.value.toBigDecimal()
-                                                                        .setScale(1, RoundingMode.UP).toDouble(), " mm"
-                                                                ))
+                                                                this.textProperty().bind(
+                                                                    Bindings.concat(
+                                                                        it.maxTempProperty.value.toInt(),
+                                                                        " °C"
+                                                                    )
+                                                                )
+                                                            }.apply {
+                                                                graphic =
+                                                                    FontAwesomeIconView(FontAwesomeIcon.LONG_ARROW_UP)
+                                                            }
+                                                            label {
+                                                                this.textProperty().bind(
+                                                                    Bindings.concat(
+                                                                        it.precipitationProperty.value.toBigDecimal()
+                                                                            .setScale(1, RoundingMode.UP).toDouble(),
+                                                                        " mm"
+                                                                    )
+                                                                )
                                                             }
                                                         }
                                                     }
