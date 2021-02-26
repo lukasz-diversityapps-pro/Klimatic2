@@ -43,11 +43,7 @@ class WeatherForecast : View("Klimatic") {
 
     override val root = borderpane {
         style {
-            backgroundImage += this::class.java.getResource(
-                "/backgrounds/" + forecastController.getMonth() + "_" + forecastController.getRandom(
-                    18
-                ) + ".jpg"
-            ).toURI()
+            backgroundImage += this::class.java.getResource("/backgrounds/" + forecastController.getMonth() + "_" + forecastController.getRandom(12) + ".jpg").toURI()
             backgroundSize += BackgroundSize(1.0, 1.0, true, true, false, true)
         }
 
@@ -55,16 +51,12 @@ class WeatherForecast : View("Klimatic") {
             addClass(Styles.contentWrapper)
             currentWeatherView()
             vbox(alignment = Pos.CENTER) {
-                vbox(alignment = Pos.CENTER) {
-                    cityLabel = label()
-                    todayIcon = label()
-                    todayTemp = label()
-                    todayPressure = label()
-                    todayPrecipitation = label()
-                }.style {
-                    backgroundColor += Color(1.0, 1.0, 1.0, 0.5)
-                    padding = box(30.px, 0.px)
-                }
+                cityLabel = label()
+                todayIcon = label()
+                todayTemp = label()
+                todayPressure = label()
+                todayPrecipitation = label()
+
                 dividerHB = hbox()
                 forecastView = datagrid()
             }
